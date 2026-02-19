@@ -9,6 +9,7 @@ const navigation = [
   { name: "Pipeline", href: "/pipeline", icon: "🔬" },
   { name: "Cron Jobs", href: "/crons", icon: "⏰" },
   { name: "Agents", href: "/agents", icon: "🤖" },
+  { name: "Calendar", href: "/calendar", icon: "📅" },
 ];
 
 export function Sidebar() {
