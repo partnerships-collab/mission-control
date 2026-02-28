@@ -1,3 +1,137 @@
+"use client";
+
+import React from "react";
+
+// ── Top Brands Table ─────────────────────────────────────────────────────────
+interface SponsorRow {
+  domain: string;
+  base_domain: string;
+  channel_count: number;
+  video_count: number;
+}
+interface SponsorsResponse {
+  total: number; limit: number; offset: number; results: SponsorRow[];
+}
+
+function TopBrandsTable() {
+  const [search, setSearch]     = React.useState("");
+  const [debouncedSearch, setDS]= React.useState("");
+  const [sort, setSort]         = React.useState<"channels"|"videos">("channels");
+  const [minChannels, setMinCh] = React.useState(1);
+  const [minVideos, setMinVid]  = React.useState(0);
+  const [page, setPage]         = React.useState(0);
+  const [data, setData]         = React.useState<SponsorsResponse|null>(null);
+  const [loading, setLoading]   = React.useState(true);
+  const [error, setError]       = React.useState<string|null>(null);
+  const PAGE_SIZE = 50;
+
+  React.useEffect(() => {
+    const t = setTimeout(() => { setDS(search); setPage(0); }, 350);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  React.useEffect(() => {
+    setLoading(true); setError(null);
+    const p = new URLSearchParams({
+      limit: String(PAGE_SIZE), offset: String(page * PAGE_SIZE),
+      sort, min_channels: String(minChannels), min_videos: String(minVideos),
+    });
+    if (debouncedSearch) p.set("search", debouncedSearch);
+    fetch(`/api/sponsors?${p}`)
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false); })
+      .catch(e => { setError(e.message); setLoading(false); });
+  }, [debouncedSearch, sort, minChannels, minVideos, page]);
+
+  const maxCh    = data?.results[0]?.channel_count ?? 1;
+  const totalPgs = data ? Math.ceil(data.total / PAGE_SIZE) : 0;
+
+  return (
+    <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-5">
+      <div className="flex items-start justify-between mb-4 gap-3 flex-wrap">
+        <div>
+          <h3 className="text-lg font-semibold text-zinc-100">Top Brands by Channel Reach</h3>
+          <p className="text-xs text-zinc-500 mt-0.5">
+            Live from Postgres · APPROVED sponsors only{data && ` · ${data.total.toLocaleString()} total`}
+          </p>
+        </div>
+        <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shrink-0">
+          {data ? data.total.toLocaleString() : "—"} sponsors
+        </span>
+      </div>
+
+      {/* Controls */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <input type="text" placeholder="Search domain..." value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="flex-1 min-w-[140px] text-xs px-3 py-1.5 rounded-lg bg-zinc-700 border border-zinc-600 text-zinc-100 outline-none placeholder-zinc-500"
+        />
+        {[
+          { val: sort, set: (v: string) => { setSort(v as "channels"|"videos"); setPage(0); },
+            opts: [["channels","Sort: Channels"],["videos","Sort: Videos"]] },
+          { val: String(minChannels), set: (v: string) => { setMinCh(Number(v)); setPage(0); },
+            opts: [["1","Min ch: 1+"],["5","Min ch: 5+"],["10","Min ch: 10+"],["50","Min ch: 50+"],["100","Min ch: 100+"]] },
+          { val: String(minVideos), set: (v: string) => { setMinVid(Number(v)); setPage(0); },
+            opts: [["0","Min vids: any"],["100","Min vids: 100+"],["500","Min vids: 500+"],["1000","Min vids: 1K+"]] },
+        ].map((sel, i) => (
+          <select key={i} value={sel.val} onChange={e => sel.set(e.target.value)}
+            className="text-xs px-2.5 py-1.5 rounded-lg bg-zinc-700 border border-zinc-600 text-zinc-400 outline-none cursor-pointer">
+            {sel.opts.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        ))}
+      </div>
+
+      {error && <p className="text-xs py-4 text-center text-red-400">Error: {error}</p>}
+
+      {!error && (
+        <>
+          <div className="grid gap-2 pb-2 mb-1 text-xs uppercase tracking-wider text-zinc-600"
+            style={{ gridTemplateColumns: "1.5rem 1fr 5.5rem 5rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <span/><span>Domain</span><span className="text-right">Channels</span><span className="text-right">Videos</span>
+          </div>
+
+          {loading && <p className="text-xs py-6 text-center text-zinc-600 animate-pulse">Loading...</p>}
+
+          {!loading && data?.results.map((b, i) => (
+            <div key={b.domain} className="grid gap-2 py-2 items-center"
+              style={{ gridTemplateColumns: "1.5rem 1fr 5.5rem 5rem", borderBottom: i < data.results.length-1 ? "1px solid rgba(255,255,255,0.03)" : undefined }}>
+              <span className="text-xs text-zinc-600 tabular-nums">{page*PAGE_SIZE+i+1}</span>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-zinc-100 truncate">{b.domain}</p>
+                {b.base_domain !== b.domain && <p className="text-xs text-zinc-600 truncate">{b.base_domain}</p>}
+                <div className="mt-1 h-0.5 rounded-full bg-zinc-700">
+                  <div className="h-full rounded-full bg-indigo-500/50" style={{ width: `${(b.channel_count/maxCh)*100}%` }}/>
+                </div>
+              </div>
+              <p className="text-sm font-semibold text-right text-zinc-100 tabular-nums">{b.channel_count.toLocaleString()}</p>
+              <p className="text-sm text-right text-zinc-500 tabular-nums">{b.video_count.toLocaleString()}</p>
+            </div>
+          ))}
+
+          {!loading && data?.results.length === 0 && (
+            <p className="text-xs py-6 text-center text-zinc-600">No results</p>
+          )}
+
+          {totalPgs > 1 && (
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-zinc-700">
+              <p className="text-xs text-zinc-600">Page {page+1} of {totalPgs}</p>
+              <div className="flex gap-2">
+                {[["← Prev", page===0, ()=>setPage(p=>Math.max(0,p-1))],
+                  ["Next →", page>=totalPgs-1, ()=>setPage(p=>Math.min(totalPgs-1,p+1))]].map(([lbl, dis, fn]) => (
+                  <button key={lbl as string} onClick={fn as ()=>void} disabled={dis as boolean}
+                    className="text-xs px-3 py-1 rounded-lg bg-zinc-700 text-zinc-400 disabled:opacity-30">
+                    {lbl as string}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 type StageStatus = "Active" | "Paused" | "Complete";
 
 interface PipelineStat {
@@ -159,6 +293,9 @@ export default function PipelinePage() {
           </div>
         ))}
       </div>
+
+      {/* Top Brands */}
+      <TopBrandsTable />
     </div>
   );
 }
