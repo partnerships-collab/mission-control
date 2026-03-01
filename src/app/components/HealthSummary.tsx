@@ -1,8 +1,10 @@
+import { realCronJobs } from '../crons/real-cron-data';
+
 export function HealthSummary() {
-  const cronHealthy = 32;
-  const cronTotal = 66;
-  const cronErrors = 18;
-  const cronIdle = 16;
+  const cronTotal = realCronJobs.length;
+  const cronHealthy = realCronJobs.filter(job => job.lastStatus === 'success').length;
+  const cronErrors = realCronJobs.filter(job => job.lastStatus === 'error').length;
+  const cronIdle = cronTotal - cronHealthy - cronErrors;
   const healthPercentage = Math.round((cronHealthy / cronTotal) * 100);
 
   return (
