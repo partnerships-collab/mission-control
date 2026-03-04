@@ -31,18 +31,18 @@ export function PipelineStats() {
   ];
 
   return (
-    <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-6">
-      <h3 className="text-lg font-semibold text-zinc-100 mb-4">Pipeline Stats</h3>
+    <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+      <h3 className="text-lg font-semibold text-slate-100 mb-4">Pipeline Stats</h3>
       
       <div className="grid grid-cols-2 gap-4">
         {stats.map((stat) => (
           <div key={stat.label} className="space-y-2">
             <div className="flex items-center space-x-2">
               <span className="text-lg">{stat.icon}</span>
-              <span className="text-sm text-zinc-400">{stat.label}</span>
+              <span className="text-sm text-slate-400">{stat.label}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-semibold text-zinc-100">{stat.value}</span>
+              <span className="text-xl font-semibold text-slate-100">{stat.value}</span>
               <span className={`text-xs font-medium ${
                 stat.changeType === 'positive' ? 'text-green-400' : 'text-red-400'
               }`}>
@@ -53,10 +53,10 @@ export function PipelineStats() {
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-zinc-700">
+      <div className="mt-4 pt-4 border-t border-slate-700">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-zinc-400">Last updated:</span>
-          <span className="text-zinc-300">2 minutes ago</span>
+          <span className="text-slate-400">Last updated:</span>
+          <span className="text-slate-300">2 minutes ago</span>
         </div>
       </div>
     </div>

@@ -162,14 +162,14 @@ export default function CalendarPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-100">Team Calendar</h2>
-          <p className="text-sm text-zinc-400 mt-1">Agent cron job schedules</p>
+          <h2 className="text-2xl font-bold text-slate-100">Team Calendar</h2>
+          <p className="text-sm text-slate-400 mt-1">Agent cron job schedules</p>
         </div>
         
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setCompactMode(!compactMode)}
-            className="px-3 py-1 bg-zinc-700 text-zinc-300 rounded-md hover:bg-zinc-600 text-sm border border-zinc-600"
+            className="px-3 py-1 bg-slate-700 text-slate-300 rounded-md hover:bg-slate-600 text-sm border border-slate-600"
           >
             {compactMode ? 'Full View' : 'Compact'}
           </button>
@@ -178,13 +178,13 @@ export default function CalendarPage() {
 
       {/* Agent Filter Buttons */}
       <div className="flex items-center space-x-4">
-        <span className="text-sm text-zinc-400">Filter:</span>
+        <span className="text-sm text-slate-400">Filter:</span>
         <button
           onClick={() => setSelectedAgent(null)}
           className={`px-3 py-1 rounded-md text-sm border ${
             selectedAgent === null
-              ? 'bg-zinc-600 text-zinc-100 border-zinc-500'
-              : 'bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700'
+              ? 'bg-slate-600 text-slate-100 border-slate-500'
+              : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
           }`}
         >
           All Agents
@@ -196,7 +196,7 @@ export default function CalendarPage() {
             className={`px-3 py-1 rounded-md text-sm border flex items-center space-x-2 ${
               selectedAgent === agent.id
                 ? `bg-${agent.color}-600 text-white border-${agent.color}-500`
-                : `bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700`
+                : `bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700`
             }`}
           >
             <span>{agent.emoji}</span>
@@ -206,13 +206,13 @@ export default function CalendarPage() {
       </div>
 
       {/* Legend */}
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-zinc-200 mb-3">Legend</h3>
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h3 className="text-sm font-semibold text-slate-200 mb-3">Legend</h3>
         <div className="flex flex-wrap gap-4">
           {agents.map((agent) => (
             <div key={agent.id} className="flex items-center space-x-2">
               <div className={`w-4 h-4 rounded ${agent.colorClass}`}></div>
-              <span className="text-sm text-zinc-300">
+              <span className="text-sm text-slate-300">
                 {agent.emoji} {agent.name}
               </span>
             </div>
@@ -221,16 +221,16 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar Grid */}
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg overflow-hidden">
+      <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <div className="min-w-full">
             {/* Header */}
-            <div className="grid grid-cols-6 bg-zinc-900 border-b border-zinc-700">
-              <div className="p-3 text-sm font-semibold text-zinc-300 border-r border-zinc-700">
+            <div className="grid grid-cols-6 bg-slate-900 border-b border-slate-700">
+              <div className="p-3 text-sm font-semibold text-slate-300 border-r border-slate-700">
                 Time
               </div>
               {weekDays.map((day) => (
-                <div key={day} className="p-3 text-sm font-semibold text-zinc-300 text-center border-r border-zinc-700 last:border-r-0">
+                <div key={day} className="p-3 text-sm font-semibold text-slate-300 text-center border-r border-slate-700 last:border-r-0">
                   {day}
                 </div>
               ))}
@@ -244,15 +244,15 @@ export default function CalendarPage() {
                 : jobs;
 
               return (
-                <div key={hour} className="grid grid-cols-6 border-b border-zinc-700 last:border-b-0">
+                <div key={hour} className="grid grid-cols-6 border-b border-slate-700 last:border-b-0">
                   {/* Time Label */}
-                  <div className="p-3 text-sm text-zinc-400 border-r border-zinc-700 bg-zinc-900/50">
+                  <div className="p-3 text-sm text-slate-400 border-r border-slate-700 bg-slate-900/50">
                     {formatHour(hour)}
                   </div>
 
                   {/* Days */}
                   {weekDays.map((day) => (
-                    <div key={`${day}-${hour}`} className="p-1 border-r border-zinc-700 last:border-r-0 min-h-[60px] relative">
+                    <div key={`${day}-${hour}`} className="p-1 border-r border-slate-700 last:border-r-0 min-h-[60px] relative">
                       {compactMode ? (
                         /* Compact Mode - Dots */
                         <div className="flex flex-wrap gap-1">
@@ -270,7 +270,7 @@ export default function CalendarPage() {
                           {filteredHourJobs.map((job, index) => (
                             <div
                               key={index}
-                              className={`${getAgentColor(job.agent, 75)} border ${getAgentColor(job.agent)} border-opacity-50 rounded px-2 py-1 text-xs text-zinc-900 font-medium cursor-pointer hover:opacity-80 transition-opacity`}
+                              className={`${getAgentColor(job.agent, 75)} border ${getAgentColor(job.agent)} border-opacity-50 rounded px-2 py-1 text-xs text-slate-900 font-medium cursor-pointer hover:opacity-80 transition-opacity`}
                               title={`${agents.find(a => a.id === job.agent)?.emoji} ${job.name} (${job.duration || 5}min)`}
                             >
                               <div className="truncate">
@@ -290,8 +290,8 @@ export default function CalendarPage() {
       </div>
 
       {/* Stats Summary */}
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-zinc-100 mb-4">Schedule Summary</h3>
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-slate-100 mb-4">Schedule Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {agents.map((agent) => {
             const agentJobs = cronJobs.filter(job => job.agent === agent.id);
@@ -300,29 +300,29 @@ export default function CalendarPage() {
             const intervalJobs = agentJobs.filter(job => job.frequency === 'interval').length;
             
             return (
-              <div key={agent.id} className="bg-zinc-900 border border-zinc-700 rounded-lg p-4">
+              <div key={agent.id} className="bg-slate-900 border border-slate-700 rounded-lg p-4">
                 <div className="flex items-center space-x-2 mb-3">
                   <span className="text-2xl">{agent.emoji}</span>
-                  <h4 className="text-lg font-semibold text-zinc-100">{agent.name}</h4>
+                  <h4 className="text-lg font-semibold text-slate-100">{agent.name}</h4>
                   <div className={`w-3 h-3 rounded-full ${agent.colorClass}`}></div>
                 </div>
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-zinc-400">Total Jobs:</span>
-                    <span className="text-zinc-300 font-medium">{agentJobs.length}</span>
+                    <span className="text-slate-400">Total Jobs:</span>
+                    <span className="text-slate-300 font-medium">{agentJobs.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-400">Daily:</span>
-                    <span className="text-zinc-300">{dailyJobs}</span>
+                    <span className="text-slate-400">Daily:</span>
+                    <span className="text-slate-300">{dailyJobs}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-400">Hourly:</span>
-                    <span className="text-zinc-300">{hourlyJobs}</span>
+                    <span className="text-slate-400">Hourly:</span>
+                    <span className="text-slate-300">{hourlyJobs}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-400">Interval:</span>
-                    <span className="text-zinc-300">{intervalJobs}</span>
+                    <span className="text-slate-400">Interval:</span>
+                    <span className="text-slate-300">{intervalJobs}</span>
                   </div>
                 </div>
               </div>

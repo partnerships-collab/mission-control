@@ -49,13 +49,13 @@ export default function CronsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 lg:p-8 max-w-7xl space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-zinc-100">Cron Jobs</h2>
+        <h1 className="text-2xl font-bold text-slate-100">Cron Jobs</h1>
         <select
           value={filterAgent}
           onChange={(e) => setFilterAgent(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-zinc-100"
+          className="bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-slate-100"
         >
           <option value="">All Agents</option>
           <option value="Ari">Ari</option>
@@ -64,10 +64,10 @@ export default function CronsPage() {
         </select>
       </div>
 
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg overflow-hidden">
+      <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-zinc-700">
+            <thead className="bg-slate-700">
               <tr>
                 {[
                   { key: 'name', label: 'Name' },
@@ -80,35 +80,35 @@ export default function CronsPage() {
                   <th
                     key={column.key}
                     onClick={() => handleSort(column.key as SortField)}
-                    className="text-left px-6 py-3 text-sm font-medium text-zinc-200 cursor-pointer hover:bg-zinc-600"
+                    className="text-left px-6 py-3 text-sm font-medium text-slate-200 cursor-pointer hover:bg-slate-600"
                   >
                     <div className="flex items-center space-x-1">
                       <span>{column.label}</span>
                       {sortField === column.key && (
-                        <span className="text-zinc-400">
+                        <span className="text-slate-400">
                           {sortDirection === 'asc' ? '↑' : '↓'}
                         </span>
                       )}
                     </div>
                   </th>
                 ))}
-                <th className="text-left px-6 py-3 text-sm font-medium text-zinc-200">Actions</th>
+                <th className="text-left px-6 py-3 text-sm font-medium text-slate-200">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredAndSortedJobs.map((job) => (
-                <tr key={job.id} className="border-b border-zinc-700 hover:bg-zinc-700/50">
+                <tr key={job.id} className="border-b border-slate-700 hover:bg-slate-700/50">
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">
                       <div className={`w-2 h-2 rounded-full animate-pulse ${getStatusColor(job.lastStatus, job.consecutiveErrors)}`}></div>
-                      <span className="text-sm font-medium text-zinc-200">{job.name}</span>
+                      <span className="text-sm font-medium text-slate-200">{job.name}</span>
                     </div>
                     {job.errorMessage && (
                       <div className="text-xs text-red-400 mt-1">{job.errorMessage}</div>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-zinc-300">{job.agent}</td>
-                  <td className="px-6 py-4 text-sm font-mono text-zinc-300">{job.schedule}</td>
+                  <td className="px-6 py-4 text-sm text-slate-300">{job.agent}</td>
+                  <td className="px-6 py-4 text-sm font-mono text-slate-300">{job.schedule}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       job.lastStatus === 'success' && job.consecutiveErrors === 0 ? 'bg-green-500/10 text-green-400' :
@@ -118,10 +118,10 @@ export default function CronsPage() {
                       {job.consecutiveErrors >= 3 ? 'error' : job.consecutiveErrors >= 1 ? 'warning' : job.lastStatus}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-zinc-300">{job.lastRun}</td>
+                  <td className="px-6 py-4 text-sm text-slate-300">{job.lastRun}</td>
                   <td className="px-6 py-4">
                     <span className={`text-sm ${
-                      job.consecutiveErrors === 0 ? 'text-zinc-400' :
+                      job.consecutiveErrors === 0 ? 'text-slate-400' :
                       job.consecutiveErrors >= 3 ? 'text-red-400 font-semibold' :
                       'text-yellow-400 font-semibold'
                     }`}>

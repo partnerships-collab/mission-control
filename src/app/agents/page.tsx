@@ -200,14 +200,14 @@ export default function AgentsPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-zinc-100">Agents</h2>
+      <h2 className="text-2xl font-bold text-slate-100">Agents</h2>
       
       <div className="space-y-4">
         {agents.map((agent) => (
-          <div key={agent.id} className="bg-zinc-800 border border-zinc-700 rounded-lg">
+          <div key={agent.id} className="bg-slate-800 border border-slate-700 rounded-lg">
             {/* Agent Header */}
             <div 
-              className="p-6 cursor-pointer hover:bg-zinc-700/50 transition-colors"
+              className="p-6 cursor-pointer hover:bg-slate-700/50 transition-colors"
               onClick={() => toggleAgent(agent.id)}
             >
               <div className="flex items-center justify-between">
@@ -215,20 +215,20 @@ export default function AgentsPage() {
                   <span className="text-4xl">{agent.icon}</span>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-xl font-semibold text-zinc-100">{agent.name}</h3>
+                      <h3 className="text-xl font-semibold text-slate-100">{agent.name}</h3>
                       <div className={`w-2 h-2 rounded-full animate-pulse ${getStatusColor(agent.status)}`}></div>
                     </div>
-                    <p className="text-sm text-zinc-400">{agent.role}</p>
-                    <p className="text-sm text-zinc-500">Model: {agent.model}</p>
+                    <p className="text-sm text-slate-400">{agent.role}</p>
+                    <p className="text-sm text-slate-500">Model: {agent.model}</p>
                   </div>
                 </div>
                 
                 <div className="flex items-center space-x-6">
                   <div className="text-right">
-                    <div className="text-sm text-zinc-300">Uptime: {agent.uptime}</div>
-                    <div className="text-sm text-zinc-400">Last: {agent.lastActivity}</div>
+                    <div className="text-sm text-slate-300">Uptime: {agent.uptime}</div>
+                    <div className="text-sm text-slate-400">Last: {agent.lastActivity}</div>
                   </div>
-                  <div className="text-zinc-400">
+                  <div className="text-slate-400">
                     {expandedAgent === agent.id ? '▼' : '▶'}
                   </div>
                 </div>
@@ -237,46 +237,46 @@ export default function AgentsPage() {
 
             {/* Expanded Content */}
             {expandedAgent === agent.id && (
-              <div className="border-t border-zinc-700 p-6">
+              <div className="border-t border-slate-700 p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Agent Stats */}
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-zinc-200">Statistics</h4>
+                    <h4 className="text-lg font-semibold text-slate-200">Statistics</h4>
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="text-sm text-zinc-400">Cron Jobs Managed:</span>
-                        <span className="text-sm text-zinc-300">{agent.stats.cronJobsManaged}</span>
+                        <span className="text-sm text-slate-400">Cron Jobs Managed:</span>
+                        <span className="text-sm text-slate-300">{agent.stats.cronJobsManaged}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-zinc-400">Success Rate:</span>
+                        <span className="text-sm text-slate-400">Success Rate:</span>
                         <span className="text-sm text-green-400">{agent.stats.successRate}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-zinc-400">Avg Response Time:</span>
-                        <span className="text-sm text-zinc-300">{agent.stats.avgResponseTime}</span>
+                        <span className="text-sm text-slate-400">Avg Response Time:</span>
+                        <span className="text-sm text-slate-300">{agent.stats.avgResponseTime}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-zinc-400">Memory Usage:</span>
-                        <span className="text-sm text-zinc-300">{agent.stats.memoryUsage}</span>
+                        <span className="text-sm text-slate-400">Memory Usage:</span>
+                        <span className="text-sm text-slate-300">{agent.stats.memoryUsage}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-zinc-400">Workspace:</span>
-                        <span className="text-sm font-mono text-zinc-400 truncate">{agent.workspacePath}</span>
+                        <span className="text-sm text-slate-400">Workspace:</span>
+                        <span className="text-sm font-mono text-slate-400 truncate">{agent.workspacePath}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Assigned Cron Jobs */}
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-zinc-200">Assigned Cron Jobs</h4>
+                    <h4 className="text-lg font-semibold text-slate-200">Assigned Cron Jobs</h4>
                     <div className="space-y-2">
                       {agent.assignedCrons.map((cronName, index) => (
                         <div 
                           key={index}
-                          className="flex items-center justify-between p-2 bg-zinc-700/50 rounded-md"
+                          className="flex items-center justify-between p-2 bg-slate-700/50 rounded-md"
                         >
-                          <span className="text-sm font-mono text-zinc-300">{cronName}</span>
-                          <span className="text-xs text-zinc-500">Active</span>
+                          <span className="text-sm font-mono text-slate-300">{cronName}</span>
+                          <span className="text-xs text-slate-500">Active</span>
                         </div>
                       ))}
                     </div>
@@ -284,15 +284,15 @@ export default function AgentsPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="mt-6 pt-4 border-t border-zinc-700">
+                <div className="mt-6 pt-4 border-t border-slate-700">
                   <div className="flex space-x-3">
                     <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
                       View Logs
                     </button>
-                    <button className="px-4 py-2 bg-zinc-600 text-zinc-200 rounded-md hover:bg-zinc-500 text-sm">
+                    <button className="px-4 py-2 bg-slate-600 text-slate-200 rounded-md hover:bg-slate-500 text-sm">
                       Manage Crons
                     </button>
-                    <button className="px-4 py-2 bg-zinc-600 text-zinc-200 rounded-md hover:bg-zinc-500 text-sm">
+                    <button className="px-4 py-2 bg-slate-600 text-slate-200 rounded-md hover:bg-slate-500 text-sm">
                       Agent Config
                     </button>
                   </div>
@@ -304,38 +304,38 @@ export default function AgentsPage() {
       </div>
 
       {/* Summary Stats */}
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-zinc-100 mb-4">Agent Summary</h3>
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-slate-100 mb-4">Agent Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-zinc-100">
+            <div className="text-2xl font-bold text-slate-100">
               {agents.length}
             </div>
-            <div className="text-sm text-zinc-400">Total Agents</div>
+            <div className="text-sm text-slate-400">Total Agents</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-400">
               {agents.filter(a => a.status === 'healthy').length}
             </div>
-            <div className="text-sm text-zinc-400">Healthy</div>
+            <div className="text-sm text-slate-400">Healthy</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-zinc-100">
+            <div className="text-2xl font-bold text-slate-100">
               {agents.reduce((sum, agent) => sum + agent.stats.cronJobsManaged, 0)}
             </div>
-            <div className="text-sm text-zinc-400">Total Cron Jobs</div>
+            <div className="text-sm text-slate-400">Total Cron Jobs</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-400">98.6\u0025</div>
-            <div className="text-sm text-zinc-400">Overall Uptime</div>
+            <div className="text-sm text-slate-400">Overall Uptime</div>
           </div>
         </div>
       </div>
 
       {/* Daily Standup Section */}
-      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-6">
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-zinc-100">
+          <h3 className="text-lg font-semibold text-slate-100">
             Daily Standup — {new Date(mockStandupData.date).toLocaleDateString('en-US', { 
               year: 'numeric', 
               month: 'short', 
@@ -344,7 +344,7 @@ export default function AgentsPage() {
           </h3>
           <button
             onClick={() => setShowLast7Days(!showLast7Days)}
-            className="px-3 py-1 bg-zinc-700 text-zinc-300 rounded-md hover:bg-zinc-600 text-sm border border-zinc-600"
+            className="px-3 py-1 bg-slate-700 text-slate-300 rounded-md hover:bg-slate-600 text-sm border border-slate-600"
           >
             {showLast7Days ? 'Show Today' : 'Last 7 Days'}
           </button>
@@ -354,10 +354,10 @@ export default function AgentsPage() {
           /* Current Standup */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {mockStandupData.agents.map((standupAgent) => (
-              <div key={standupAgent.agent} className="bg-zinc-900 border border-zinc-700 rounded-lg p-4">
+              <div key={standupAgent.agent} className="bg-slate-900 border border-slate-700 rounded-lg p-4">
                 <div className="flex items-center space-x-2 mb-4">
                   <span className="text-2xl">{standupAgent.emoji}</span>
-                  <h4 className="text-lg font-semibold text-zinc-100 capitalize">{standupAgent.agent}</h4>
+                  <h4 className="text-lg font-semibold text-slate-100 capitalize">{standupAgent.agent}</h4>
                 </div>
 
                 <div className="space-y-4">
@@ -367,7 +367,7 @@ export default function AgentsPage() {
                       <h5 className="text-sm font-medium text-green-400 mb-2">Shipped</h5>
                       <ul className="space-y-1">
                         {standupAgent.shipped.map((item, index) => (
-                          <li key={index} className="text-sm text-zinc-300 flex items-start">
+                          <li key={index} className="text-sm text-slate-300 flex items-start">
                             <span className="text-green-400 mr-2">•</span>
                             <span>{item}</span>
                           </li>
@@ -382,7 +382,7 @@ export default function AgentsPage() {
                       <h5 className="text-sm font-medium text-blue-400 mb-2">In Progress</h5>
                       <ul className="space-y-1">
                         {standupAgent.in_progress.map((item, index) => (
-                          <li key={index} className="text-sm text-zinc-300 flex items-start">
+                          <li key={index} className="text-sm text-slate-300 flex items-start">
                             <span className="text-blue-400 mr-2">•</span>
                             <span>{item}</span>
                           </li>
@@ -394,11 +394,11 @@ export default function AgentsPage() {
                   {/* Tomorrow */}
                   {standupAgent.tomorrow.length > 0 && (
                     <div>
-                      <h5 className="text-sm font-medium text-zinc-400 mb-2">Tomorrow</h5>
+                      <h5 className="text-sm font-medium text-slate-400 mb-2">Tomorrow</h5>
                       <ul className="space-y-1">
                         {standupAgent.tomorrow.map((item, index) => (
-                          <li key={index} className="text-sm text-zinc-300 flex items-start">
-                            <span className="text-zinc-400 mr-2">•</span>
+                          <li key={index} className="text-sm text-slate-300 flex items-start">
+                            <span className="text-slate-400 mr-2">•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -412,7 +412,7 @@ export default function AgentsPage() {
                       <h5 className="text-sm font-medium text-red-400 mb-2">Blockers</h5>
                       <ul className="space-y-1">
                         {standupAgent.blockers.map((item, index) => (
-                          <li key={index} className="text-sm text-zinc-300 flex items-start">
+                          <li key={index} className="text-sm text-slate-300 flex items-start">
                             <span className="text-red-400 mr-2">•</span>
                             <span>{item}</span>
                           </li>
@@ -427,7 +427,7 @@ export default function AgentsPage() {
                       <h5 className="text-sm font-medium text-yellow-400 mb-2">FYI</h5>
                       <ul className="space-y-1">
                         {standupAgent.fyi.map((item, index) => (
-                          <li key={index} className="text-sm text-zinc-300 flex items-start">
+                          <li key={index} className="text-sm text-slate-300 flex items-start">
                             <span className="text-yellow-400 mr-2">•</span>
                             <span>{item}</span>
                           </li>
@@ -442,17 +442,17 @@ export default function AgentsPage() {
         ) : (
           /* Last 7 Days List */
           <div className="space-y-2">
-            <div className="text-sm text-zinc-400 mb-4">Click any date to view that standup (coming soon)</div>
+            <div className="text-sm text-slate-400 mb-4">Click any date to view that standup (coming soon)</div>
             {pastStandupDates.map((date) => (
               <button
                 key={date}
-                className="w-full text-left p-3 bg-zinc-900 border border-zinc-700 rounded-md hover:bg-zinc-700/50 transition-colors"
+                className="w-full text-left p-3 bg-slate-900 border border-slate-700 rounded-md hover:bg-slate-700/50 transition-colors"
                 onClick={() => {
                   // TODO: Implement detail view later
                 }}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-zinc-300">
+                  <span className="text-slate-300">
                     {new Date(date).toLocaleDateString('en-US', { 
                       weekday: 'short',
                       year: 'numeric', 
@@ -460,7 +460,7 @@ export default function AgentsPage() {
                       day: 'numeric' 
                     })}
                   </span>
-                  <span className="text-zinc-500 text-sm">3 agents</span>
+                  <span className="text-slate-500 text-sm">3 agents</span>
                 </div>
               </button>
             ))}
