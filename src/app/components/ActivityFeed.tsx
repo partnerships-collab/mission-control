@@ -26,7 +26,6 @@ function parseRelativeTime(str: string): number {
   return 0;
 }
 
-type AgentFilter = "" | "Ari" | "Arlo" | "Axel";
 type StatusFilter = "" | "success" | "error" | "warning";
 
 function getStatusStyle(job: CronJob) {
@@ -39,11 +38,18 @@ function getStatusStyle(job: CronJob) {
   return { dot: "bg-emerald-400", text: "text-emerald-400", label: "success" };
 }
 
-export function ActivityFeed() {
+interface ActivityFeedProps {
+  /** When provided, overrides internal agent filter state */
+  agentFilter?: string;
+}
+
+export function ActivityFeed({ agentFilter: externalAgentFilter }: ActivityFeedProps = {}) {
   const [jobs, setJobs] = useState<CronJob[]>([]);
   const [loading, setLoading] = useState(true);
-  const [agentFilter, setAgentFilter] = useState<AgentFilter>("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("");
+
+  // Only show internal agent filter dropdown when no external control is provided
+  const isExternallyControlled = externalAgentFilter !== undefined;
 
   useEffect(() => {
     fetch('/api/crons')
@@ -54,7 +60,12 @@ export function ActivityFeed() {
 
   const filtered = jobs
     .filter((j) => j.lastRun !== "never" && j.lastRun !== "—")
-    .filter((j) => !agentFilter || j.agent === agentFilter)
+    .filter((j) => {
+      const agent = externalAgentFilter;
+      if (!agent || agent === "All") return true;
+      if (agent === "System") return !["Ari", "Arlo", "Axel"].includes(j.agent);
+      return j.agent === agent;
+    })
     .filter((j) => {
       if (!statusFilter) return true;
       if (statusFilter === "error") return j.lastStatus === "error" || j.consecutiveErrors >= 3;
@@ -66,18 +77,21 @@ export function ActivityFeed() {
 
   return (
     <>
-      {/* Filters */}
+      {/* Filters row — always show status filter; hide agent dropdown when externally controlled */}
       <div className="flex gap-3">
-        <select
-          value={agentFilter}
-          onChange={(e) => setAgentFilter(e.target.value as AgentFilter)}
-          className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-emerald-500/40"
-        >
-          <option value="">All Agents</option>
-          <option value="Ari">Ari</option>
-          <option value="Arlo">Arlo</option>
-          <option value="Axel">Axel</option>
-        </select>
+        {!isExternallyControlled && (
+          <select
+            onChange={() => {/* no-op: controlled externally */}}
+            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-emerald-500/40"
+            defaultValue=""
+          >
+            <option value="">All Agents</option>
+            <option value="Ari">Ari</option>
+            <option value="Arlo">Arlo</option>
+            <option value="Axel">Axel</option>
+            <option value="System">System</option>
+          </select>
+        )}
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
