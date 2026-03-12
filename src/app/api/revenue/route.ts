@@ -1,53 +1,67 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
-import path from "path";
 
-const COPPER_EMAIL = "partnerships@creatorsagency.co";
+const CLOSE_API_KEY_PATH = "/Users/aurora/.openclaw/workspaces/axel/.secrets/close_api_key.txt";
+const CLOSE_BASE_URL = "https://api.close.com/api/v1";
 const GOAL_USD = 25_000_000;
+
+interface CloseOpportunity {
+  value: number | null;
+  date_won: string | null;
+  lead_name: string | null;
+  status_label: string | null;
+  user_name: string | null;
+}
+
+interface CloseResponse {
+  data: CloseOpportunity[];
+  has_more: boolean;
+}
 
 export async function GET() {
   try {
-    const keyPath = path.join(
-      "/Users/aurora/.openclaw/workspaces/axel/.secrets/copper_api_key.txt"
-    );
-    const apiKey = fs.readFileSync(keyPath, "utf-8").trim();
+    const apiKey = fs.readFileSync(CLOSE_API_KEY_PATH, "utf-8").trim();
+    const authHeader = "Basic " + Buffer.from(`${apiKey}:`).toString("base64");
 
-    const res = await fetch(
-      "https://api.copper.com/developer_api/v1/opportunities/search",
-      {
-        method: "POST",
+    const allOpportunities: CloseOpportunity[] = [];
+    let skip = 0;
+    const limit = 100;
+
+    while (true) {
+      const url = `${CLOSE_BASE_URL}/opportunity/?status_type=won&_limit=${limit}&_skip=${skip}`;
+      const res = await fetch(url, {
         headers: {
-          "X-PW-Application": "developer_api",
-          "X-PW-AccessToken": apiKey,
-          "X-PW-UserEmail": COPPER_EMAIL,
+          Authorization: authHeader,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ assignee_id: null, page_size: 200 }),
-      }
-    );
+      });
 
-    if (!res.ok) {
-      throw new Error(`Copper API error: ${res.status}`);
+      if (!res.ok) throw new Error(`Close API error: ${res.status}`);
+
+      const body: CloseResponse = await res.json();
+      allOpportunities.push(...body.data);
+
+      if (!body.has_more || body.data.length < limit) break;
+      skip += limit;
     }
 
-    const opportunities = await res.json();
     const currentYear = new Date().getFullYear();
-    const now = Math.floor(Date.now() / 1000);
-    const thirtyDaysAgo = now - 30 * 86400;
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
     let totalYtdUsd = 0;
     let last30DayUsd = 0;
 
-    for (const opp of opportunities) {
-      if (opp.status !== "Won") continue;
-      if (!opp.close_date) continue;
-      const closeYear = new Date(opp.close_date * 1000).getFullYear();
-      if (closeYear !== currentYear) continue;
+    for (const opp of allOpportunities) {
+      if (!opp.date_won) continue;
 
-      const val = opp.monetary_value || 0;
+      const dateWon = new Date(opp.date_won);
+      if (dateWon.getFullYear() !== currentYear) continue;
+
+      const val = opp.value || 0;
       totalYtdUsd += val;
 
-      if (opp.close_date >= thirtyDaysAgo) {
+      if (dateWon >= thirtyDaysAgo) {
         last30DayUsd += val;
       }
     }
@@ -61,7 +75,7 @@ export async function GET() {
       last30DayUsd,
       projectedAnnualUsd,
       sources: {
-        copper: totalYtdUsd,
+        copper: totalYtdUsd, // key kept for frontend (RevenueTracker.tsx) compatibility
         impact: null,
         redVentures: null,
         adsByMoney: null,
